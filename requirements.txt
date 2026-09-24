@@ -1,0 +1,31 @@
+# ==============================================================================
+# Dependencias del Sistema de Monitoreo de Calidad de Red (TT-2027-A183)
+# ==============================================================================
+# Nota de Arquitectura:
+# El núcleo de los colectores de conectividad (ping y traceroute) está implementado
+# utilizando la librería estándar de Python (subprocess, re, dataclasses, json),
+# garantizando portabilidad sin dependencias externas obligatorias.
+# 
+# Las siguientes librerías enriquecen las capacidades de serialización, validación,
+# telemetría de interfaces locales y pruebas unitarias:
+# ==============================================================================
+
+# Modelado, validación de datos y serialización tipada
+pydantic>=2.5.0
+
+# Telemetría avanzada del sistema operativo e interfaces de red locales
+psutil>=5.9.8
+
+# Cliente HTTP para comunicación y envío de métricas al backend (API REST)
+requests>=2.31.0
+
+# Gestión de configuración mediante variables de entorno
+python-dotenv>=1.0.1
+
+# ==============================================================================
+# Herramientas de Desarrollo y Calidad de Código (Opcional para desarrollo)
+# ==============================================================================
+pytest>=8.0.0
+pytest-cov>=4.1.0
+flake8>=7.0.0
+black>=24.0.0
