@@ -62,6 +62,21 @@ código no puede borrar tablas ni modificar el esquema.
 
 ---
 
+### Consulta del historial en pgAdmin 4
+
+En pgAdmin: *Servers → PostgreSQL 17 → Databases → monitoreo_red*, clic derecho →
+*Query Tool*, pegar y ejecutar con F5:
+
+```sql
+SELECT p.fecha_hora, p.tipo_prueba, p.host_destino, p.estado,
+       m.latencia_ms, m.perdida_paquetes_pct, m.saltos,
+       d.estado_global, d.tipo_anomalia, d.severidad
+FROM pruebas_conectividad p
+JOIN metricas m      ON m.id_prueba = p.id_prueba
+JOIN diagnosticos d  ON d.id_ejecucion = p.id_ejecucion
+ORDER BY p.fecha_hora DESC;
+```
+
 ## 4. Modelo de datos
 
 Las seis entidades y sus relaciones 1:N son las del diagrama [`erd_monitoreo_red.svg`](../erd_monitoreo_red.svg):
