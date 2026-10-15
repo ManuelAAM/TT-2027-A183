@@ -14,6 +14,10 @@ Para mantener la trazabilidad con los objetivos específicos del Trabajo Termina
 | `04_traceroute_topology_hops.png` | Colector Traceroute (Mapeo de Topología IPN) | `python examples/run_evidence_suite.py --step 3` |
 | `05_iperf3_throughput_metrics.png` | Colector iPerf3 (Rendimiento y Throughput) | `python examples/run_evidence_suite.py --step 4` |
 | `06_unified_diagnostic_report.png` | Motor de Diagnóstico y Recomendaciones | `python examples/run_evidence_suite.py --step 5` |
+| `07_db_esquema_tablas.png` | Almacenamiento: creación de la base y sus 6 tablas | `powershell -ExecutionPolicy Bypass -File db/crear_base.ps1` |
+| `08_storage_tests.png` | Almacenamiento: pruebas unitarias y de integración | `python -m unittest tests.test_storage -v` |
+| `09_storage_historial.png` | Almacenamiento: diagnóstico guardado y consulta del historial | `python examples/guardar_diagnostico.py escom.ipn.mx` |
+| `10_pgadmin_registros.png` | Almacenamiento: registros vistos en pgAdmin 4 | Consulta en pgAdmin (ver db/README.md) |
 
 ## Pautas de Captura para el Reporte Técnico (ESCOM - IPN)
 1. **Resolución y Legibilidad:** Ajuste la fuente de su terminal a un tamaño visible (14pt - 16pt) con fondo oscuro contrastado (PowerShell o Windows Terminal).

@@ -222,6 +222,51 @@ python examples/run_evidence_suite.py --step 5
 
 ---
 
+### Evidencia 7: Creación de la Base de Datos PostgreSQL
+Crea la base `monitoreo_red`, aplica el esquema de las 6 tablas del diagrama ER y configura el usuario de aplicación `monitoreo_app` (ver [`db/README.md`](db/README.md)).
+```powershell
+powershell -ExecutionPolicy Bypass -File db/crear_base.ps1
+```
+<div align="center">
+  <img src="docs/img/07_db_esquema_tablas.png" alt="Evidencia 7: Esquema PostgreSQL creado" width="850"/>
+  <p><em>Figura 7. Aplicación del esquema y listado de las tablas redes, dispositivos, pruebas_conectividad, metricas, diagnosticos y recomendaciones.</em></p>
+</div>
+
+---
+
+### Evidencia 8: Pruebas del Módulo de Almacenamiento
+Nueve pruebas unitarias del mapeo de DTOs a filas y tres pruebas de integración contra PostgreSQL, que se ejecutan en una transacción revertida al final.
+```powershell
+python -m unittest tests.test_storage -v
+```
+<div align="center">
+  <img src="docs/img/08_storage_tests.png" alt="Evidencia 8: Pruebas del almacenamiento" width="850"/>
+  <p><em>Figura 8. Ejecución de las 12 pruebas del módulo src/storage sin errores.</em></p>
+</div>
+
+---
+
+### Evidencia 9: Persistencia y Consulta del Historial
+Ejecuta un diagnóstico, lo guarda en la base y consulta las últimas pruebas, el resumen por destino y el último diagnóstico con sus recomendaciones.
+```powershell
+python examples/guardar_diagnostico.py escom.ipn.mx
+```
+<div align="center">
+  <img src="docs/img/09_storage_historial.png" alt="Evidencia 9: Historial de pruebas almacenado" width="850"/>
+  <p><em>Figura 9. Historial de pruebas hacia 8.8.8.8, 192.0.2.1 (inalcanzable) y escom.ipn.mx recuperado desde PostgreSQL.</em></p>
+</div>
+
+---
+
+### Evidencia 10: Registros Almacenados en pgAdmin 4
+Consulta que une pruebas, métricas y diagnósticos (incluida en [`db/README.md`](db/README.md)).
+<div align="center">
+  <img src="docs/img/10_pgadmin_registros.png" alt="Evidencia 10: Registros en pgAdmin" width="850"/>
+  <p><em>Figura 10. Registros históricos con su clasificación de anomalía y severidad, consultados desde pgAdmin 4.</em></p>
+</div>
+
+---
+
 ## 💻 6. Uso Programático del Módulo
 
 ### Diagnóstico Completo en una sola llamada:
@@ -269,25 +314,37 @@ Trabajo Terminal/
 ├── README.md                           # Documentación técnica principal (ESCOM - IPN)
 ├── TT-REESTRUC_183.md                  # Especificación oficial del Trabajo Terminal 2027-A183
 ├── requirements.txt                    # Dependencias de Python para desarrollo y pruebas
+├── .env.example                        # Plantilla de conexión a PostgreSQL (copiar como .env)
+├── db/                                 # BASE DE DATOS POSTGRESQL
+│   ├── schema.sql                      # Esquema de las 6 tablas, restricciones e índices
+│   ├── permisos.sql                    # Usuario de aplicación con permisos mínimos
+│   ├── crear_base.ps1                  # Script de creación de la base (Windows)
+│   └── README.md                       # Modelo de datos y ajustes respecto al diagrama ER
 ├── docs/
 │   └── img/                            # Carpeta específica para capturas de evidencia técnica
 │       └── README.md                   # Pautas y guía de captura de imágenes
 ├── src/
 │   ├── __init__.py                     # Inicializador del paquete principal
-│   └── monitoring/                     # MÓDULO DE MONITOREO DE RED
-│       ├── __init__.py                 # Fachada y API pública del módulo
-│       ├── models.py                   # Modelos DTOs (PingResult, TracerouteResult, IPerfResult, etc.)
-│       ├── utils.py                    # Capa de seguridad, subprocess, multi-encoding y validación
-│       ├── ping_collector.py           # Colector y parser multiplataforma de Ping ICMP
-│       ├── traceroute_collector.py     # Colector y parser salto a salto de Traceroute
-│       ├── iperf_collector.py          # Colector y parser JSON nativo de iPerf3 (TCP/UDP)
-│       └── diagnostics.py              # Motor de orquestación y reglas de recomendación inicial
+│   ├── monitoring/                     # MÓDULO DE MONITOREO DE RED
+│   │   ├── __init__.py                 # Fachada y API pública del módulo
+│   │   ├── models.py                   # Modelos DTOs (PingResult, TracerouteResult, IPerfResult, etc.)
+│   │   ├── utils.py                    # Capa de seguridad, subprocess, multi-encoding y validación
+│   │   ├── ping_collector.py           # Colector y parser multiplataforma de Ping ICMP
+│   │   ├── traceroute_collector.py     # Colector y parser salto a salto de Traceroute
+│   │   ├── iperf_collector.py          # Colector y parser JSON nativo de iPerf3 (TCP/UDP)
+│   │   └── diagnostics.py              # Motor de orquestación y reglas de recomendación inicial
+│   └── storage/                        # MÓDULO DE ALMACENAMIENTO HISTÓRICO
+│       ├── config.py                   # Configuración de conexión desde .env
+│       ├── mapper.py                   # Conversión de DTOs a filas de las tablas
+│       └── repository.py               # Guardado de reportes y consultas de historial (psycopg 3)
 ├── tests/
 │   ├── __init__.py
-│   └── test_collectors.py              # 17 pruebas unitarias automatizadas (unittest)
+│   ├── test_collectors.py              # 17 pruebas unitarias automatizadas (unittest)
+│   └── test_storage.py                 # 12 pruebas del almacenamiento (unitarias e integración)
 └── examples/
     ├── run_diagnostics.py              # Demostración básica rápida
-    └── run_evidence_suite.py           # Suite interactiva y visual para captura de evidencias
+    ├── run_evidence_suite.py           # Suite interactiva y visual para captura de evidencias
+    └── guardar_diagnostico.py          # Diagnóstico, guardado en PostgreSQL y consulta de historial
 ```
 
 ---
@@ -296,6 +353,6 @@ Trabajo Terminal/
 - [x] **Fase 1.1:** Colectores de conectividad (Ping ICMP y Traceroute) multiplataforma con serialización JSON.
 - [x] **Fase 1.2:** Colector de rendimiento y throughput de red mediante **iPerf3** (TCP y UDP).
 - [x] **Fase 1.3:** Motor heurístico de diagnóstico preliminar y generación de acciones recomendadas.
-- [ ] **Fase 2:** Diseño del esquema de base de datos relacional en **PostgreSQL** y capa ORM/Data Access.
+- [x] **Fase 2:** Diseño del esquema de base de datos relacional en **PostgreSQL** y capa de acceso a datos (`db/`, `src/storage/`).
 - [ ] **Fase 3:** Desarrollo de la **API REST** central en Python (FastAPI) para recepción de telemetría de sondas.
 - [ ] **Fase 4:** Interfaz Web interactiva de monitoreo, alertas tempranas y generación de reportes PDF para personal técnico.
