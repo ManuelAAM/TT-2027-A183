@@ -22,6 +22,9 @@ requests>=2.31.0
 # Gestión de configuración mediante variables de entorno
 python-dotenv>=1.0.1
 
+# Conector de PostgreSQL para el almacenamiento histórico (src/storage)
+psycopg[binary]>=3.2
+
 # ==============================================================================
 # Herramientas de Desarrollo y Calidad de Código (Opcional para desarrollo)
 # ==============================================================================
