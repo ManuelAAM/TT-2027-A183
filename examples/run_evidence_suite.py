@@ -11,6 +11,7 @@ Uso:
     python examples/run_evidence_suite.py --step 2  # Solo Manejo de errores / Inalcanzable
     python examples/run_evidence_suite.py --step 3  # Solo Traceroute topológico
     python examples/run_evidence_suite.py --step 4  # Solo iPerf3 / Rendimiento
+    python examples/run_evidence_suite.py --step 4 --iperf-server 192.168.1.50  # iPerf3 hacia otro equipo
     python examples/run_evidence_suite.py --step 5  # Solo Diagnóstico y Recomendaciones
 """
 
@@ -134,7 +135,7 @@ def run_step_3_traceroute() -> None:
         ))
 
 
-def run_step_4_iperf() -> None:
+def run_step_4_iperf(server: str = "127.0.0.1") -> None:
     print_banner(
         4,
         "Colector de Ancho de Banda y Rendimiento (iPerf3)",
@@ -143,7 +144,6 @@ def run_step_4_iperf() -> None:
     installed = is_iperf_installed()
     print(f"[*] Verificación de binario 'iperf3' en el PATH del sistema: {installed}")
 
-    server = "127.0.0.1"
     print(f"[*] Invocando colector para servidor iPerf3 '{server}:5201' (TCP, 5 segundos)...")
     res = execute_iperf(server_host=server, server_port=5201, duration_seconds=5)
 
@@ -192,13 +192,18 @@ def main() -> None:
         choices=[1, 2, 3, 4, 5],
         help="Número específico de prueba a ejecutar (1 a 5). Si se omite, se ejecutan todas.",
     )
+    parser.add_argument(
+        "--iperf-server",
+        default="127.0.0.1",
+        help="IP del servidor iPerf3 para el paso 4 (por defecto 127.0.0.1, el mismo equipo).",
+    )
     args = parser.parse_args()
 
     steps = {
         1: run_step_1_ping_success,
         2: run_step_2_ping_errors,
         3: run_step_3_traceroute,
-        4: run_step_4_iperf,
+        4: lambda: run_step_4_iperf(args.iperf_server),
         5: run_step_5_diagnostics,
     }
 

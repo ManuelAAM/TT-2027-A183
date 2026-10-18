@@ -116,8 +116,9 @@ flowchart TD
 * **En Windows:**
   * Opción 1 (Automática con Winget):
     ```powershell
-    winget install BudMan.iPerf3
+    winget install --id ar51an.iPerf3 -e --source winget
     ```
+    Después de instalar, abrir una terminal nueva para que el `PATH` se actualice.
   * Opción 2 (Descarga directa): Descargar los binarios `iperf3.exe` y `cygwin1.dll` desde [iperf.fr](https://iperf.fr/iperf-download.php) y agregarlos al `PATH` del sistema.
 * **En Linux (Debian / Ubuntu):**
   ```bash
@@ -199,13 +200,15 @@ python examples/run_evidence_suite.py --step 3
 ---
 
 ### Evidencia 5: Colector de Rendimiento y Throughput (iPerf3)
-Muestra la invocación del colector iPerf3, la verificación del binario y el manejo controlado cuando la utilidad no está instalada o el servidor está inactivo.
+Muestra la invocación del colector iPerf3, la verificación del binario y el manejo controlado cuando la utilidad no está instalada o el servidor está inactivo. Antes de ejecutarlo, iniciar el servidor iPerf3 en otra terminal (`iperf3 -s`).
 ```powershell
 python examples/run_evidence_suite.py --step 4
 ```
+
+> **Nota (Windows):** iPerf3 en Windows no expone retransmisiones TCP ni RTT, por lo que esos campos quedan en `null`. La regla de congestión TCP del motor de diagnóstico solo se activa cuando el cliente se ejecuta en Linux.
 <div align="center">
   <img src="docs/img/05_iperf3_throughput_metrics.png" alt="Evidencia 5: Colector iPerf3" width="850"/>
-  <p><em>Figura 5. Ejecución del colector iPerf3 y reporte de diagnóstico en formato JSON.</em></p>
+  <p><em>Figura 5. Ejecución del colector iPerf3 (TCP, 5 s) contra un servidor en el mismo equipo (127.0.0.1) y su resultado serializado a JSON. Al no salir a la red, el throughput refleja la capacidad local y no la del enlace.</em></p>
 </div>
 
 ---
