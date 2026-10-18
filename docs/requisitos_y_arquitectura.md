@@ -121,24 +121,24 @@ historial de todas las sondas se consulte en un solo lugar.
 
 ```mermaid
 flowchart LR
-    subgraph Sonda["Sonda (cliente) — Python"]
-        COL["Colectores<br/>Ping · Traceroute · iPerf3"]
-        MOT["Motor de diagnóstico<br/>y recomendaciones"]
+    subgraph Sonda["Sonda - cliente Python"]
+        COL["Colectores: Ping, Traceroute, iPerf3"]
+        MOT["Motor de diagnostico y recomendaciones"]
         COL --> MOT
     end
 
     subgraph Servidor["Servidor central"]
-        API["API REST<br/>(FastAPI) ⏳"]
-        STO["Módulo de almacenamiento<br/>src/storage ✅"]
-        WEB["Interfaz web ⏳"]
-        DB[("PostgreSQL 17<br/>monitoreo_red ✅")]
+        API["API REST FastAPI - pendiente"]
+        STO["Modulo de almacenamiento src/storage"]
+        WEB["Interfaz web - pendiente"]
+        DB[("PostgreSQL 17 monitoreo_red")]
         API --> STO --> DB
         WEB --> API
     end
 
-    MOT -- "NetworkHealthReport (JSON) ⏳" --> API
-    MOT -. "TT I: escritura directa ✅" .-> STO
-    TEC(["Personal técnico /<br/>Usuario final"]) --> WEB
+    MOT -->|"Reporte JSON (TT II)"| API
+    MOT -.->|"Escritura directa (TT I)"| STO
+    TEC(["Personal tecnico y usuario final"]) --> WEB
 ```
 
 **Estado actual (TT I):** la sonda usa directamente el módulo de almacenamiento (línea punteada). Por eso
@@ -179,7 +179,7 @@ sequenceDiagram
     C->>SO: proceso con shell=False y timeout
     SO-->>C: salida de texto o JSON
     C-->>M: PingResult, TracerouteResult, IPerfResult
-    M->>M: aplicar reglas → estado y recomendaciones
+    M->>M: aplicar reglas (estado y recomendaciones)
     M-->>U: NetworkHealthReport
     U->>R: guardar_reporte(reporte)
     R->>DB: BEGIN
