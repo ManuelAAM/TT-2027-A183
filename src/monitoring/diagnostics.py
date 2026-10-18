@@ -18,6 +18,11 @@ from src.monitoring.traceroute_collector import execute_traceroute
 
 logger = logging.getLogger(__name__)
 
+# Umbrales de las reglas de diagnóstico (también los usa src/storage para clasificar).
+LATENCIA_ELEVADA_MS = 120.0
+RETRANSMISIONES_CONGESTION = 50
+PERDIDA_UDP_MAXIMA_PCT = 5.0
+
 
 class NetworkDiagnosticsEngine:
     """Orquestador de pruebas de conectividad y generador de recomendaciones iniciales."""
@@ -111,7 +116,7 @@ class NetworkDiagnosticsEngine:
                 recommendations.append(
                     "Acción: Renueve la configuración de red y concesión DHCP de su interfaz (ej. 'ipconfig /renew' o reiniciar interfaz)."
                 )
-            elif ping.avg_rtt_ms and ping.avg_rtt_ms > 120.0:
+            elif ping.avg_rtt_ms and ping.avg_rtt_ms > LATENCIA_ELEVADA_MS:
                 status = "DEGRADED"
                 recommendations.append(
                     f"LATENCIA ELEVADA: RTT promedio de {ping.avg_rtt_ms} ms supera el umbral óptimo de red académica LAN (<50 ms)."
@@ -136,7 +141,7 @@ class NetworkDiagnosticsEngine:
 
         # Evaluación de Rendimiento y Ancho de Banda (iPerf3)
         if iperf and iperf.is_success:
-            if iperf.retransmissions and iperf.retransmissions > 50:
+            if iperf.retransmissions and iperf.retransmissions > RETRANSMISIONES_CONGESTION:
                 status = "DEGRADED" if status == "OPTIMAL" else status
                 recommendations.append(
                     f"CONGESTIÓN DETECTADA EN CAPA DE TRANSPORTE: {iperf.retransmissions} retransmisiones de paquetes TCP registradas durante la prueba."
@@ -144,7 +149,10 @@ class NetworkDiagnosticsEngine:
                 recommendations.append(
                     "Acción: Posible saturación de buffers de conmutador (switch) o desajuste de dúplex (duplex mismatch) en la tarjeta de red."
                 )
-            if iperf.packet_loss_percentage and iperf.packet_loss_percentage > 5.0:
+            if (
+                iperf.packet_loss_percentage
+                and iperf.packet_loss_percentage > PERDIDA_UDP_MAXIMA_PCT
+            ):
                 status = "DEGRADED" if status == "OPTIMAL" else status
                 recommendations.append(
                     f"PÉRDIDA EN FLUJO UDP: {iperf.packet_loss_percentage}% de paquetes descartados en la prueba de ancho de banda."

@@ -100,7 +100,7 @@ class IPerfCollector:
             error_msg = (
                 f"La utilidad 'iperf3' no está disponible en el PATH del sistema ({self.os_type}). "
                 "Para ejecutar pruebas de rendimiento, instale iPerf3 según las instrucciones del README.md "
-                "(Windows: descargar iperf3 o winget install BudMan.iPerf3; Linux: sudo apt install iperf3)."
+                "(Windows: descargar iperf3 o winget install ar51an.iPerf3; Linux: sudo apt install iperf3)."
             )
             logger.warning(error_msg)
             return IPerfResult(
