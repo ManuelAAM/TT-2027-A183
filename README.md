@@ -91,6 +91,8 @@ flowchart TD
 
 ## 🎯 3. Mapeo de Componentes Desarrollados vs. Objetivos del Trabajo Terminal
 
+> El análisis completo de requisitos funcionales y no funcionales, la arquitectura cliente-servidor y la trazabilidad con los objetivos del protocolo están en [`docs/requisitos_y_arquitectura.md`](docs/requisitos_y_arquitectura.md).
+
 | Componente Implementado | Archivo de Código | Justificación Técnica | Objetivo del TT que Cumple |
 | :--- | :--- | :--- | :--- |
 | **Modelos de Datos Estandarizados** | [`src/monitoring/models.py`](file:///c:/Users/osito/OneDrive/Documentos/Trabajo%20Terminal/src/monitoring/models.py) | Define DTOs tipados (`PingResult`, `TracerouteHop`, `TracerouteResult`, `IPerfResult`, `NetworkHealthReport`) con métodos nativos `.to_dict()` y `.to_json()` para persistencia. | **Objetivo Específico 1 y 2:** Normalización y estructuración previa al almacenamiento en PostgreSQL. |
@@ -324,6 +326,7 @@ Trabajo Terminal/
 │   ├── crear_base.ps1                  # Script de creación de la base (Windows)
 │   └── README.md                       # Modelo de datos y ajustes respecto al diagrama ER
 ├── docs/
+│   ├── requisitos_y_arquitectura.md    # Requisitos (RF/RNF), arquitectura y trazabilidad con objetivos
 │   └── img/                            # Carpeta específica para capturas de evidencia técnica
 │       └── README.md                   # Pautas y guía de captura de imágenes
 ├── src/
