@@ -18,6 +18,9 @@ Para mantener la trazabilidad con los objetivos específicos del Trabajo Termina
 | `08_storage_tests.png` | Almacenamiento: pruebas unitarias y de integración | `python -m unittest tests.test_storage -v` |
 | `09_storage_historial.png` | Almacenamiento: diagnóstico guardado y consulta del historial | `python examples/guardar_diagnostico.py escom.ipn.mx` |
 | `10_pgadmin_registros.png` | Almacenamiento: registros vistos en pgAdmin 4 | Consulta en pgAdmin (ver db/README.md) |
+| `11_historial_semanal.png` | Ampliación: historial agrupado por semana | `python examples/historial_periodos.py` |
+| `12_historial_mensual.png` | Ampliación: historial agrupado por mes | `python examples/historial_periodos.py --periodo mes` |
+| `13_pgadmin_capturas_paquetes.png` | Ampliación: tabla capturas_paquetes creada (7 tablas) | `powershell -ExecutionPolicy Bypass -File db/crear_base.ps1` y pgAdmin |
 
 ## Pautas de Captura para el Reporte Técnico (ESCOM - IPN)
 1. **Resolución y Legibilidad:** Ajuste la fuente de su terminal a un tamaño visible (14pt - 16pt) con fondo oscuro contrastado (PowerShell o Windows Terminal).

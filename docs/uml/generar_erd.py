@@ -1,7 +1,7 @@
 """Genera el diagrama entidad-relación completo de monitoreo_red (erd_completo.svg).
 
-Incluye las seis tablas de db/schema.sql y la tabla de la ampliación (db/ampliacion_capturas.sql).
-Para obtener el PNG se abre el SVG con Microsoft Edge en modo headless (ver render_erd.ps1).
+Incluye las seis tablas de db/schema.sql y la tabla CAPTURAS_PAQUETES de db/ampliacion_capturas.sql.
+Para obtener el PNG se abre el SVG con Microsoft Edge en modo headless.
 
 Uso: python docs/uml/generar_erd.py
 """
@@ -11,7 +11,7 @@ from xml.sax.saxutils import escape
 W, H = 1220, 860
 FILA, CAB = 19, 34
 ANCHO = 340
-AZUL, GUINDA, GRIS = "#2F4A7A", "#6E1E3A", "#333333"
+AZUL, GRIS = "#2F4A7A", "#333333"
 
 # nombre: (x, y, columnas [(nombre, tipo, marca)], color de encabezado, nota)
 TABLAS = {
@@ -34,12 +34,11 @@ TABLAS = {
     "CAPTURAS_PAQUETES": (860, 80, [("id_captura", "SERIAL", "PK"), ("id_prueba", "INTEGER", "FK"),
                                     ("herramienta", "VARCHAR(20)", ""), ("interfaz", "VARCHAR(100)", ""),
                                     ("filtro_captura", "TEXT", ""), ("paquetes_totales", "INTEGER", ""),
-                                    ("paquetes_perdidos", "INTEGER", ""), ("paquetes_danados", "INTEGER", "*"),
+                                    ("paquetes_perdidos", "INTEGER", ""), ("paquetes_danados", "INTEGER", ""),
                                     ("retransmisiones_tcp", "INTEGER", ""), ("duplicados", "INTEGER", ""),
                                     ("fuera_de_orden", "INTEGER", ""), ("delta_promedio_ms", "NUMERIC(10,3)", ""),
                                     ("delta_maximo_ms", "NUMERIC(10,3)", ""), ("codigos_icmp", "JSONB", ""),
-                                    ("archivo_pcap", "TEXT", ""), ("fecha_captura", "TIMESTAMPTZ", "")], GUINDA,
-                          "ampliación (tshark)"),
+                                    ("archivo_pcap", "TEXT", ""), ("fecha_captura", "TIMESTAMPTZ", "")], AZUL, None),
     "DIAGNOSTICOS": (20, 560, [("id_diagnostico", "SERIAL", "PK"), ("id_dispositivo", "INTEGER", "FK"),
                                ("id_metrica", "INTEGER", "FK"), ("id_ejecucion", "UUID", ""),
                                ("estado_global", "VARCHAR(20)", ""), ("tipo_anomalia", "VARCHAR(50)", ""),
@@ -82,9 +81,7 @@ def tabla(nombre):
             fondo = {"PK": "#F4C430", "FK": "#9DB4DD", "UQ": "#C9CED8"}[marca]
             out.append(f'<rect x="{x+8}" y="{yy-12}" width="24" height="15" rx="3" fill="{fondo}"/>')
             t(x + 20, yy - 1, marca, 9.5, "bold", "#1C2333", anchor="middle")
-        peso = "bold" if marca == "PK" or marca == "*" else "normal"
-        color_col = GUINDA if marca == "*" else GRIS
-        t(x + 40, yy, col, 13, peso, color_col, mono=True)
+        t(x + 40, yy, col, 13, "bold" if marca == "PK" else "normal", GRIS, mono=True)
         t(x + ANCHO - 12, yy, tipo, 12, color="#6B7385", anchor="end", mono=True)
 
 
@@ -118,7 +115,7 @@ out.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" vi
            f'font-family="Arial, Helvetica, sans-serif">')
 out.append(f'<rect width="{W}" height="{H}" fill="white"/>')
 t(20, 34, "Diagrama entidad-relación · base de datos monitoreo_red (PostgreSQL 17)", 19, "bold", "#1C2333")
-t(20, 58, "Esquema implementado (db/schema.sql) y ampliación para el análisis de paquetes (db/ampliacion_capturas.sql)",
+t(20, 58, "Esquema de db/schema.sql ampliado con la tabla CAPTURAS_PAQUETES para el análisis de paquetes (db/ampliacion_capturas.sql)",
   12.5, color="#6B7385")
 
 # Relaciones (1 = uno, N = muchos, 0..1 = cero o uno)
@@ -141,7 +138,7 @@ for n in TABLAS:
 
 # Leyenda
 ly = 790
-out.append(f'<rect x="860" y="{ly-20}" width="340" height="78" rx="8" fill="#F5F6F9"/>')
+out.append(f'<rect x="860" y="{ly-20}" width="340" height="66" rx="8" fill="#F5F6F9"/>')
 for i, (m, c, txt) in enumerate([("PK", "#F4C430", "llave primaria"), ("FK", "#9DB4DD", "llave foránea"),
                                  ("UQ", "#C9CED8", "valor único")]):
     out.append(f'<rect x="{874}" y="{ly-8+i*20}" width="24" height="15" rx="3" fill="{c}"/>')
@@ -149,8 +146,6 @@ for i, (m, c, txt) in enumerate([("PK", "#F4C430", "llave primaria"), ("FK", "#9
     t(906, ly + 4 + i * 20, txt, 12)
 t(1030, ly + 4, "1 / N: uno a muchos", 12)
 t(1030, ly + 24, "0..1: cero o uno", 12)
-out.append(f'<rect x="1030" y="{ly+33}" width="12" height="12" rx="2" fill="{GUINDA}"/>')
-t(1048, ly + 44, "tabla de la ampliación", 12)
 out.append("</svg>")
 
 destino = Path(__file__).resolve().parent / "erd_completo.svg"
