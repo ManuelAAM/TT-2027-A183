@@ -21,6 +21,7 @@ Para mantener la trazabilidad con los objetivos específicos del Trabajo Termina
 | `11_historial_semanal.png` | Ampliación: historial agrupado por semana | `python examples/historial_periodos.py` |
 | `12_historial_mensual.png` | Ampliación: historial agrupado por mes | `python examples/historial_periodos.py --periodo mes` |
 | `13_pgadmin_capturas_paquetes.png` | Ampliación: tabla capturas_paquetes creada (7 tablas) | `powershell -ExecutionPolicy Bypass -File db/crear_base.ps1` y pgAdmin |
+| `14_pruebas_funcionales_escom.png` | Pruebas funcionales PF-01 a PF-09 desde la red de la ESCOM | `python examples/pruebas_funcionales.py` |
 
 ## Pautas de Captura para el Reporte Técnico (ESCOM - IPN)
 1. **Resolución y Legibilidad:** Ajuste la fuente de su terminal a un tamaño visible (14pt - 16pt) con fondo oscuro contrastado (PowerShell o Windows Terminal).
