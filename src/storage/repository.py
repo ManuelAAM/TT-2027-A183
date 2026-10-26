@@ -297,3 +297,62 @@ class MonitoreoRepository:
             """,
             (dias,),
         ).fetchall()
+
+    def historial_por_periodo(
+        self,
+        periodo: str = "semana",
+        host_destino: Optional[str] = None,
+        tipo_prueba: Optional[str] = None,
+        periodos: int = 12,
+    ) -> List[Dict[str, Any]]:
+        """Métricas agregadas por semana o por mes, comparadas con el periodo anterior.
+
+        Cada fila resume un destino y tipo de prueba en un periodo (las semanas inician en
+        lunes). Las columnas *_anterior y variacion_* comparan contra el periodo previo del
+        mismo destino y tipo, para detectar tendencias de degradación.
+
+        Args:
+            periodo: "semana" o "mes".
+            host_destino: Filtra un destino; None incluye todos.
+            tipo_prueba: Filtra un tipo (PING, TRACEROUTE, IPERF_TCP, IPERF_UDP).
+            periodos: Número de semanas o meses hacia atrás, incluido el actual.
+        """
+        unidades = {"semana": ("week", "1 week"), "mes": ("month", "1 month")}
+        if periodo not in unidades:
+            raise ValueError("periodo debe ser 'semana' o 'mes'")
+        trunc, intervalo = unidades[periodo]
+        return self.conn.execute(
+            """
+            WITH agregado AS (
+                SELECT date_trunc(%(trunc)s, p.fecha_hora)          AS inicio_periodo,
+                       p.host_destino, p.tipo_prueba,
+                       count(*)                                     AS total_pruebas,
+                       count(*) FILTER (WHERE p.estado <> 'SUCCESS') AS pruebas_con_falla,
+                       round(avg(m.latencia_ms), 2)                 AS latencia_promedio_ms,
+                       round(max(m.latencia_ms), 2)                 AS latencia_maxima_ms,
+                       round((percentile_cont(0.95) WITHIN GROUP
+                              (ORDER BY m.latencia_ms))::numeric, 2) AS latencia_p95_ms,
+                       round(avg(m.perdida_paquetes_pct), 2)        AS perdida_promedio_pct,
+                       round(avg(m.jitter_ms), 2)                   AS jitter_promedio_ms,
+                       round(avg(m.ancho_banda_mbps), 2)            AS ancho_banda_promedio_mbps
+                FROM pruebas_conectividad p
+                JOIN metricas m ON m.id_prueba = p.id_prueba
+                WHERE p.fecha_hora >= date_trunc(%(trunc)s, now())
+                                      - (%(periodos)s - 1) * %(intervalo)s::interval
+                  AND (%(host)s::text IS NULL OR p.host_destino = %(host)s)
+                  AND (%(tipo)s::text IS NULL OR p.tipo_prueba = %(tipo)s)
+                GROUP BY 1, 2, 3
+            )
+            SELECT a.*,
+                   lag(latencia_promedio_ms) OVER w AS latencia_anterior_ms,
+                   round(100 * (latencia_promedio_ms - lag(latencia_promedio_ms) OVER w)
+                         / nullif(lag(latencia_promedio_ms) OVER w, 0), 1) AS variacion_latencia_pct,
+                   lag(perdida_promedio_pct) OVER w AS perdida_anterior_pct,
+                   perdida_promedio_pct - lag(perdida_promedio_pct) OVER w AS variacion_perdida_puntos
+            FROM agregado a
+            WINDOW w AS (PARTITION BY host_destino, tipo_prueba ORDER BY inicio_periodo)
+            ORDER BY host_destino, tipo_prueba, inicio_periodo DESC
+            """,
+            {"trunc": trunc, "intervalo": intervalo, "periodos": periodos,
+             "host": host_destino, "tipo": tipo_prueba},
+        ).fetchall()

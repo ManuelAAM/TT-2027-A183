@@ -10,7 +10,8 @@ registrar históricamente los resultados obtenidos durante las pruebas de monito
 | :--- | :--- |
 | [`schema.sql`](schema.sql) | Definición de las 6 tablas, restricciones e índices. Idempotente. |
 | [`permisos.sql`](permisos.sql) | Crea el usuario de aplicación `monitoreo_app` con permisos solo de lectura y escritura de datos. |
-| [`crear_base.ps1`](crear_base.ps1) | Crea la base `monitoreo_red` y aplica el esquema y los permisos (Windows). |
+| [`ampliacion_capturas.sql`](ampliacion_capturas.sql) | Ampliación: tabla `capturas_paquetes` (análisis con tshark: paquetes dañados, tiempo delta, códigos ICMP) y vistas `historial_semanal` e `historial_mensual`. |
+| [`crear_base.ps1`](crear_base.ps1) | Crea la base `monitoreo_red` y aplica el esquema, la ampliación y los permisos (Windows). |
 
 El código que guarda y consulta los datos está en [`src/storage/`](../src/storage/).
 

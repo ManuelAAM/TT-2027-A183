@@ -55,6 +55,9 @@ if ($existe -eq "1") {
 Write-Host "[2/3] Aplicando el esquema..."
 & $psql @conexion -d $Base -f $esquema
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+# Ampliación: capturas de paquetes (tshark) y vistas de historial semanal y mensual.
+& $psql @conexion -d $Base -f (Join-Path $PSScriptRoot "ampliacion_capturas.sql")
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "[3/3] Configurando el usuario de aplicación..."
 $archivoEnv = Join-Path (Split-Path $PSScriptRoot -Parent) ".env"

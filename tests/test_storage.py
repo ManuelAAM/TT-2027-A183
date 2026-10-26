@@ -262,6 +262,31 @@ class TestRepositoryIntegracion(unittest.TestCase):
         self.assertEqual(fila["total_pruebas"], 2)
         self.assertEqual(float(fila["perdida_promedio_pct"]), 25.0)
 
+    def test_historial_por_semana_y_mes(self):
+        # Dos lunes consecutivos de septiembre de 2026: la latencia se duplica.
+        destino = "periodos.prueba.local"
+        self.repo.guardar_reporte(_reporte("OPTIMAL", ping=_ping(
+            target=destino, avg_rtt_ms=10.0, timestamp="2026-09-07T18:00:00+00:00")))
+        self.repo.guardar_reporte(_reporte("OPTIMAL", ping=_ping(
+            target=destino, avg_rtt_ms=20.0, timestamp="2026-09-14T18:00:00+00:00")))
+
+        semanas = self.repo.historial_por_periodo("semana", host_destino=destino, periodos=520)
+        self.assertEqual(len(semanas), 2)
+        reciente, anterior = semanas
+        self.assertEqual(float(reciente["latencia_promedio_ms"]), 20.0)
+        self.assertEqual(float(reciente["latencia_anterior_ms"]), 10.0)
+        self.assertEqual(float(reciente["variacion_latencia_pct"]), 100.0)
+        self.assertIsNone(anterior["latencia_anterior_ms"])
+
+        meses = self.repo.historial_por_periodo("mes", host_destino=destino, periodos=120)
+        self.assertEqual(len(meses), 1)
+        self.assertEqual(meses[0]["total_pruebas"], 2)
+        self.assertEqual(float(meses[0]["latencia_promedio_ms"]), 15.0)
+
+    def test_historial_rechaza_periodo_invalido(self):
+        with self.assertRaises(ValueError):
+            self.repo.historial_por_periodo("anio")
+
 
 if __name__ == "__main__":
     unittest.main()
