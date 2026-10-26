@@ -1,0 +1,81 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Comparación por periodos</title><style>
+:root{--guinda:#6E1E3A;--guinda-claro:#8E2D50;--tinta:#1C2333;--texto:#2A3242;--gris:#6B7385;--borde:#E3E6EC;
+--fondo:#F4F6F9;--blanco:#FFFFFF;--ok:#1E9E6A;--ok-bg:#E5F6EE;--warn:#D98E04;--warn-bg:#FDF3DC;--err:#D64545;
+--err-bg:#FCE8E8;--info:#2F6FD6;--info-bg:#E6EEFB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;color:var(--texto);background:var(--fondo);font-size:14px}
+.app{display:flex;height:900px}
+.side{width:236px;background:var(--tinta);color:#C9CEDA;padding:22px 16px;display:flex;flex-direction:column;gap:6px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:18px;margin:0 6px 22px}
+.logo .m{width:34px;height:34px;border-radius:9px;background:var(--guinda);display:grid;place-items:center;font-size:15px}
+.logo small{display:block;font-weight:400;font-size:11px;color:#9AA2B4}
+.nav{padding:10px 12px;border-radius:9px;display:flex;align-items:center;gap:10px;font-size:14px}
+.nav.act{background:rgba(255,255,255,.09);color:#fff;font-weight:600}
+.nav .i{width:18px;height:18px;border-radius:5px;border:2px solid currentColor;opacity:.85}
+.side .foot{margin-top:auto;font-size:12px;color:#8A93A6;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+.main{flex:1;padding:24px 30px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.top{display:flex;align-items:center;justify-content:space-between}
+.top h1{font-size:23px;color:var(--tinta)}
+.top p{color:var(--gris);margin-top:3px}
+.user{display:flex;align-items:center;gap:10px;color:var(--gris);font-size:13px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--guinda);color:#fff;display:grid;place-items:center;font-weight:700}
+.card{background:var(--blanco);border:1px solid var(--borde);border-radius:14px;padding:18px 20px}
+.card h3{font-size:15px;color:var(--tinta);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.card h3 span{font-weight:400;font-size:12px;color:var(--gris)}
+.grid{display:grid;gap:16px}
+.kpi .v{font-size:28px;font-weight:700;color:var(--tinta);margin-top:6px}
+.kpi .l{color:var(--gris);font-size:13px}
+.kpi .d{font-size:12px;margin-top:4px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.b-ok{background:var(--ok-bg);color:var(--ok)}.b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-err{background:var(--err-bg);color:var(--err)}.b-info{background:var(--info-bg);color:var(--info)}
+.b-gris{background:#EEF0F4;color:var(--gris)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gris);font-weight:600;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--borde)}
+td{padding:9px 10px;border-bottom:1px solid #F0F2F5}
+.mono{font-family:Consolas,"Courier New",monospace;font-size:12.5px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid var(--borde);background:#fff;color:var(--texto)}
+.btn.p{background:var(--guinda);color:#fff;border-color:var(--guinda)}
+.seg{display:inline-flex;background:#EEF0F4;border-radius:10px;padding:3px}
+.seg span{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--gris)}
+.seg .on{background:#fff;color:var(--tinta);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.input{border:1px solid var(--borde);border-radius:10px;padding:11px 14px;background:#fff;color:var(--texto);font-size:14px}
+.up{color:var(--err)}.down{color:var(--ok)}
+.nota{position:absolute;right:16px;bottom:10px;font-size:11px;color:#A0A7B5}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+</style></head><body>
+<div class="app"><aside class="side">
+ <div class="logo"><div class="m">MR</div><div>MonRed<small>Panel técnico · ESCOM</small></div></div>
+ <div class="nav"><span class="i"></span>Inicio</div><div class="nav"><span class="i"></span>Diagnóstico</div><div class="nav"><span class="i"></span>Historial</div><div class="nav act"><span class="i"></span>Comparación por periodos</div><div class="nav"><span class="i"></span>Análisis de paquetes</div><div class="nav"><span class="i"></span>Seguimiento</div><div class="nav"><span class="i"></span>Administración</div>
+ <div class="foot">3 sondas en línea<br>Última sincronización 10:42</div>
+</aside><main class="main">
+ <div class="top"><div><h1>Comparación por periodos</h1><p>Historial agregado por semana o por mes para detectar tendencias de degradación</p></div>
+ <div class="user">Encargado de laboratorio <div class="avatar">LR</div></div></div>
+ 
+<div style="display:flex;gap:12px;align-items:center">
+ <div class="seg"><span class="on">Semana</span><span>Mes</span></div>
+ <div class="input" style="padding:8px 12px">Destino: escom.ipn.mx ▾</div>
+ <div class="input" style="padding:8px 12px">Prueba: PING ▾</div>
+ <div class="input" style="padding:8px 12px">Últimas 6 semanas ▾</div>
+ <span class="btn" style="margin-left:auto">Exportar reporte</span></div>
+<div class="grid" style="grid-template-columns:minmax(0,1fr) 330px">
+ <div class="card"><h3>Latencia promedio por semana (ms) <span><span class="dot" style="background:#6E1E3A"></span>latencia promedio
+  &nbsp;<span class="dot" style="background:#E8A317"></span>percentil 95</span></h3>
+  <svg viewBox="0 0 780 270" style="width:100%;height:auto;display:block"><line x1="38" y1="240.0" x2="770" y2="240.0" stroke="#EEF0F4"/><text x="30" y="244.0" font-size="11" fill="#8A93A6" text-anchor="end">0</text><line x1="38" y1="211.25" x2="770" y2="211.25" stroke="#EEF0F4"/><text x="30" y="215.25" font-size="11" fill="#8A93A6" text-anchor="end">10</text><line x1="38" y1="182.5" x2="770" y2="182.5" stroke="#EEF0F4"/><text x="30" y="186.5" font-size="11" fill="#8A93A6" text-anchor="end">20</text><line x1="38" y1="153.75" x2="770" y2="153.75" stroke="#EEF0F4"/><text x="30" y="157.75" font-size="11" fill="#8A93A6" text-anchor="end">30</text><line x1="38" y1="125.0" x2="770" y2="125.0" stroke="#EEF0F4"/><text x="30" y="129.0" font-size="11" fill="#8A93A6" text-anchor="end">40</text><line x1="38" y1="96.25" x2="770" y2="96.25" stroke="#EEF0F4"/><text x="30" y="100.25" font-size="11" fill="#8A93A6" text-anchor="end">50</text><line x1="38" y1="67.5" x2="770" y2="67.5" stroke="#EEF0F4"/><text x="30" y="71.5" font-size="11" fill="#8A93A6" text-anchor="end">60</text><line x1="38" y1="38.75" x2="770" y2="38.75" stroke="#EEF0F4"/><text x="30" y="42.75" font-size="11" fill="#8A93A6" text-anchor="end">70</text><line x1="38" y1="10.0" x2="770" y2="10.0" stroke="#EEF0F4"/><text x="30" y="14.0" font-size="11" fill="#8A93A6" text-anchor="end">80</text><rect x="71.0" y="205.5" width="26.0" height="34.5" rx="4" fill="#6E1E3A"/><rect x="101.0" y="196.9" width="26.0" height="43.1" rx="4" fill="#E8A317"/><text x="99.0" y="261" font-size="11.5" fill="#6B7385" text-anchor="middle">21/09</text><rect x="193.0" y="202.6" width="26.0" height="37.4" rx="4" fill="#6E1E3A"/><rect x="223.0" y="193.3" width="26.0" height="46.7" rx="4" fill="#E8A317"/><text x="221.0" y="261" font-size="11.5" fill="#6B7385" text-anchor="middle">28/09</text><rect x="315.0" y="196.9" width="26.0" height="43.1" rx="4" fill="#6E1E3A"/><rect x="345.0" y="186.1" width="26.0" height="53.9" rx="4" fill="#E8A317"/><text x="343.0" y="261" font-size="11.5" fill="#6B7385" text-anchor="middle">05/10</text><rect x="437.0" y="67.5" width="26.0" height="172.5" rx="4" fill="#6E1E3A"/><rect x="467.0" y="24.4" width="26.0" height="215.6" rx="4" fill="#E8A317"/><text x="465.0" y="261" font-size="11.5" fill="#6B7385" text-anchor="middle">12/10</text><rect x="559.0" y="222.8" width="26.0" height="17.2" rx="4" fill="#6E1E3A"/><rect x="589.0" y="218.4" width="26.0" height="21.6" rx="4" fill="#E8A317"/><text x="587.0" y="261" font-size="11.5" fill="#6B7385" text-anchor="middle">19/10</text><rect x="681.0" y="219.9" width="26.0" height="20.1" rx="4" fill="#6E1E3A"/><rect x="711.0" y="214.8" width="26.0" height="25.2" rx="4" fill="#E8A317"/><text x="709.0" y="261" font-size="11.5" fill="#6B7385" text-anchor="middle">26/10</text></svg>
+ </div>
+ <div class="card"><h3>Comparación con la semana anterior</h3>
+  <div class="kpi"><div class="l">Latencia (semana del 19/10)</div><div class="v">6.00 ms</div><div class="d down">▼ 90.0 % frente a 60.00 ms</div></div>
+  <div class="kpi" style="margin-top:16px"><div class="l">Pérdida de paquetes</div><div class="v">0.00 %</div><div class="d" style="color:var(--gris)">sin cambio (+0.0 pts)</div></div>
+  <div class="kpi" style="margin-top:16px"><div class="l">Pruebas con falla</div><div class="v">1 de 2</div><div class="d" style="color:var(--gris)">traceroute sin llegar al destino</div></div>
+  <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--info-bg);color:#2A4F94;font-size:13px">
+   La semana del 12/10 se midió desde una red externa; desde el 19/10 las mediciones provienen de la red de la ESCOM.</div>
+ </div>
+</div>
+<div class="card"><h3>Detalle por semana</h3>
+ <table><tr><th>Semana</th><th>Pruebas</th><th>Fallas</th><th>Latencia prom.</th><th>Latencia p95</th><th>Pérdida</th><th>Jitter</th><th>Variación de latencia</th></tr>
+ <tr><td>26/10/2026</td><td>4</td><td>0</td><td>7.00 ms</td><td>8.10 ms</td><td>0.00 %</td><td>1.5 ms</td><td class="up">▲ 16.7 %</td></tr>
+ <tr><td>19/10/2026</td><td>2</td><td>1</td><td>6.00 ms</td><td>6.00 ms</td><td>0.00 %</td><td>2.0 ms</td><td class="down">▼ 90.0 %</td></tr>
+ <tr><td>12/10/2026</td><td>2</td><td>1</td><td>60.00 ms</td><td>60.00 ms</td><td>0.00 %</td><td>4.0 ms</td><td class="up">▲ 300.0 %</td></tr>
+ <tr><td>05/10/2026</td><td>9</td><td>0</td><td>15.00 ms</td><td>18.70 ms</td><td>0.20 %</td><td>3.1 ms</td><td class="up">▲ 15.4 %</td></tr></table>
+</div>
+</main></div><div class="nota">Mockup de alta fidelidad · datos ilustrativos · TT 2027-A183</div></body></html>

@@ -1,0 +1,28 @@
+@startuml componentes
+' Diagrama de componentes del sistema (TT1 implementado, TT2 planificado)
+!include estilo.iuml
+
+package "Sonda (equipo del laboratorio)" {
+  [Colectores\nping · traceroute · iPerf3] as COL
+  [Motor de diagnóstico\ny recomendaciones] as MOT
+  [Utilidades seguras\n(validación y procesos)] as UT
+}
+
+package "Servidor central" {
+  [Capa de acceso a datos\n(src/storage)] as STO
+  [API REST\n<<TT2>>] as API
+  [Interfaz web\n<<TT2>>] as WEB
+}
+
+database "PostgreSQL 17\nmonitoreo_red" as DB
+node "Herramientas del SO\nping · tracert · iperf3" as SO
+
+COL --> UT
+UT --> SO
+MOT --> COL
+MOT ..> STO : reporte (TT1)
+MOT ..> API : reporte JSON (TT2)
+API --> STO
+WEB --> API
+STO --> DB
+@enduml

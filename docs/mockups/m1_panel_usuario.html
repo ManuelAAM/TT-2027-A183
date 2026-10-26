@@ -1,0 +1,80 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Panel de usuario</title><style>
+:root{--guinda:#6E1E3A;--guinda-claro:#8E2D50;--tinta:#1C2333;--texto:#2A3242;--gris:#6B7385;--borde:#E3E6EC;
+--fondo:#F4F6F9;--blanco:#FFFFFF;--ok:#1E9E6A;--ok-bg:#E5F6EE;--warn:#D98E04;--warn-bg:#FDF3DC;--err:#D64545;
+--err-bg:#FCE8E8;--info:#2F6FD6;--info-bg:#E6EEFB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;color:var(--texto);background:var(--fondo);font-size:14px}
+.app{display:flex;height:900px}
+.side{width:236px;background:var(--tinta);color:#C9CEDA;padding:22px 16px;display:flex;flex-direction:column;gap:6px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:18px;margin:0 6px 22px}
+.logo .m{width:34px;height:34px;border-radius:9px;background:var(--guinda);display:grid;place-items:center;font-size:15px}
+.logo small{display:block;font-weight:400;font-size:11px;color:#9AA2B4}
+.nav{padding:10px 12px;border-radius:9px;display:flex;align-items:center;gap:10px;font-size:14px}
+.nav.act{background:rgba(255,255,255,.09);color:#fff;font-weight:600}
+.nav .i{width:18px;height:18px;border-radius:5px;border:2px solid currentColor;opacity:.85}
+.side .foot{margin-top:auto;font-size:12px;color:#8A93A6;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+.main{flex:1;padding:24px 30px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.top{display:flex;align-items:center;justify-content:space-between}
+.top h1{font-size:23px;color:var(--tinta)}
+.top p{color:var(--gris);margin-top:3px}
+.user{display:flex;align-items:center;gap:10px;color:var(--gris);font-size:13px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--guinda);color:#fff;display:grid;place-items:center;font-weight:700}
+.card{background:var(--blanco);border:1px solid var(--borde);border-radius:14px;padding:18px 20px}
+.card h3{font-size:15px;color:var(--tinta);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.card h3 span{font-weight:400;font-size:12px;color:var(--gris)}
+.grid{display:grid;gap:16px}
+.kpi .v{font-size:28px;font-weight:700;color:var(--tinta);margin-top:6px}
+.kpi .l{color:var(--gris);font-size:13px}
+.kpi .d{font-size:12px;margin-top:4px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.b-ok{background:var(--ok-bg);color:var(--ok)}.b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-err{background:var(--err-bg);color:var(--err)}.b-info{background:var(--info-bg);color:var(--info)}
+.b-gris{background:#EEF0F4;color:var(--gris)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gris);font-weight:600;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--borde)}
+td{padding:9px 10px;border-bottom:1px solid #F0F2F5}
+.mono{font-family:Consolas,"Courier New",monospace;font-size:12.5px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid var(--borde);background:#fff;color:var(--texto)}
+.btn.p{background:var(--guinda);color:#fff;border-color:var(--guinda)}
+.seg{display:inline-flex;background:#EEF0F4;border-radius:10px;padding:3px}
+.seg span{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--gris)}
+.seg .on{background:#fff;color:var(--tinta);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.input{border:1px solid var(--borde);border-radius:10px;padding:11px 14px;background:#fff;color:var(--texto);font-size:14px}
+.up{color:var(--err)}.down{color:var(--ok)}
+.nota{position:absolute;right:16px;bottom:10px;font-size:11px;color:#A0A7B5}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+</style></head><body>
+<div style="height:64px;background:#fff;border-bottom:1px solid var(--borde);display:flex;align-items:center;justify-content:space-between;padding:0 40px">
+ <div class="logo" style="color:var(--tinta);margin:0"><div class="m" style="color:#fff">MR</div><div>MonRed<small style="color:var(--gris)">Diagnóstico de red · ESCOM</small></div></div>
+ <div class="user">Laboratorio de Redes · Equipo PC-LAB2-14 <div class="avatar">AL</div></div></div>
+<div style="display:grid;grid-template-columns:520px 1fr;gap:24px;padding:28px 40px">
+ <div style="display:flex;flex-direction:column;gap:18px">
+  <div class="card" style="padding:26px">
+   <h2 style="font-size:24px;color:var(--tinta)">¿Problemas con la red?</h2>
+   <p style="color:var(--gris);margin:6px 0 18px">Escriba el sitio o equipo que no responde y el sistema revisará la conexión por usted.</p>
+   <div class="input" style="margin-bottom:12px">192.0.2.1</div>
+   <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+    <span class="badge b-gris">Puerta de enlace</span><span class="badge b-gris">escom.ipn.mx</span><span class="badge b-gris">8.8.8.8</span></div>
+   <div style="display:flex;gap:10px"><span class="btn p">Diagnosticar ahora</span><span class="btn">Medir velocidad (iPerf3)</span></div>
+  </div>
+  <div class="card"><h3>Mis diagnósticos recientes</h3>
+   <table><tr><th>Hora</th><th>Destino</th><th>Resultado</th></tr>
+   <tr><td>10:41</td><td>192.0.2.1</td><td><span class="badge b-err">UNREACHABLE</span></td></tr>
+   <tr><td>10:12</td><td>escom.ipn.mx</td><td><span class="badge b-ok">OPTIMAL</span></td></tr>
+   <tr><td>09:55</td><td>8.8.8.8</td><td><span class="badge b-ok">OPTIMAL</span></td></tr></table></div>
+ </div>
+ <div class="card" style="padding:26px">
+  <div style="display:flex;align-items:center;gap:18px;padding:18px;border-radius:12px;background:var(--err-bg)">
+   <div style="width:58px;height:58px;border-radius:50%;background:var(--err);color:#fff;display:grid;place-items:center;font-size:28px;font-weight:700">!</div>
+   <div><div style="font-size:21px;font-weight:700;color:var(--err)">El destino no responde</div>
+   <div style="color:#8C3B3B;margin-top:3px">Estado UNREACHABLE · 100 % de paquetes perdidos · diagnóstico a las 10:41</div></div></div>
+  <div class="grid" style="grid-template-columns:repeat(3,1fr);margin:18px 0">
+   <div class="card kpi"><div class="l">Latencia</div><div class="v">—</div><div class="d" style="color:var(--gris)">sin respuesta</div></div>
+   <div class="card kpi"><div class="l">Paquetes perdidos</div><div class="v" style="color:var(--err)">4 / 4</div><div class="d" style="color:var(--gris)">100 %</div></div>
+   <div class="card kpi"><div class="l">Puerta de enlace</div><div class="v" style="color:var(--ok)">OK</div><div class="d" style="color:var(--gris)">3 ms</div></div></div>
+  <h3 style="font-size:16px;color:var(--tinta);margin-bottom:4px">Qué puede hacer ahora</h3>
+  <p style="color:var(--gris);font-size:13px">Siga los pasos en orden y marque los que ya realizó.</p>
+  <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F0F2F5"><div style="width:22px;height:22px;border-radius:6px;border:2px solid var(--ok);background:var(--ok);color:#fff;display:grid;place-items:center;font-size:13px">✓</div><div><b>Paso 1.</b> Verifique que el cable de red esté conectado o que el Wi-Fi esté asociado.</div></div><div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F0F2F5"><div style="width:22px;height:22px;border-radius:6px;border:2px solid var(--ok);background:var(--ok);color:#fff;display:grid;place-items:center;font-size:13px">✓</div><div><b>Paso 2.</b> Compruebe si la puerta de enlace del laboratorio responde.</div></div><div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F0F2F5"><div style="width:22px;height:22px;border-radius:6px;border:2px solid #C5CAD4;background:#fff;color:#fff;display:grid;place-items:center;font-size:13px"></div><div><b>Paso 3.</b> Revise que el firewall del campus no bloquee los paquetes ICMP.</div></div><div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F0F2F5"><div style="width:22px;height:22px;border-radius:6px;border:2px solid #C5CAD4;background:#fff;color:#fff;display:grid;place-items:center;font-size:13px"></div><div><b>Paso 4.</b> Si el problema continúa, genere un reporte para el personal técnico.</div></div>
+  <div style="display:flex;gap:10px;margin-top:18px"><span class="btn p">Volver a diagnosticar</span><span class="btn">Generar reporte para soporte</span></div>
+ </div>
+</div><div class="nota">Mockup de alta fidelidad · datos ilustrativos · TT 2027-A183</div></body></html>

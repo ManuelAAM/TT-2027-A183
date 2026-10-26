@@ -1,0 +1,56 @@
+@startuml modelo_ampliado
+' Modelo de datos ampliado: tabla CAPTURAS_PAQUETES y vistas de historial por periodos
+!include estilo.iuml
+hide circle
+hide empty methods
+skinparam linetype ortho
+
+entity "PRUEBAS_CONECTIVIDAD" as P {
+  * id_prueba : SERIAL <<PK>>
+  --
+  id_ejecucion : UUID
+  tipo_prueba : VARCHAR(20)
+  host_destino : VARCHAR(255)
+  fecha_hora : TIMESTAMPTZ
+  estado : VARCHAR(20)
+}
+
+entity "METRICAS" as M {
+  * id_metrica : SERIAL <<PK>>
+  --
+  id_prueba : INTEGER <<FK>>
+  latencia_ms, perdida_paquetes_pct
+  jitter_ms, ancho_banda_mbps
+  retransmisiones, saltos
+}
+
+entity "CAPTURAS_PAQUETES (nueva)" as C {
+  * id_captura : SERIAL <<PK>>
+  --
+  id_prueba : INTEGER <<FK, UNIQUE>>
+  filtro_captura : TEXT
+  paquetes_totales : INTEGER
+  paquetes_perdidos : INTEGER
+  **paquetes_danados : INTEGER**
+  retransmisiones_tcp, duplicados
+  fuera_de_orden : INTEGER
+  delta_promedio_ms, delta_maximo_ms
+  codigos_icmp : JSONB
+  archivo_pcap : TEXT
+}
+
+entity "historial_semanal / historial_mensual\n<<vistas>>" as V {
+  inicio_semana / inicio_mes
+  host_destino, tipo_prueba
+  total_pruebas, pruebas_con_falla
+  latencia_promedio_ms, perdida_promedio_pct
+  jitter_promedio_ms, ancho_banda_promedio_mbps
+  paquetes_danados
+}
+
+P ||--o{ M : produce
+P ||--o| C : se analiza en
+V ..> P : agrupa
+V ..> M : agrupa
+V ..> C : suma dañados
+@enduml

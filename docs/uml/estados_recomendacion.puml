@@ -1,0 +1,11 @@
+@startuml estados_recomendacion
+' Diagrama de estados de una recomendación (columna recomendaciones.estado)
+!include estilo.iuml
+hide empty description
+
+[*] --> PENDIENTE : el motor genera\nla recomendación
+PENDIENTE --> APLICADA : el usuario o el técnico\nrealiza la acción
+PENDIENTE --> DESCARTADA : la acción no aplica\no no resolvió la falla
+APLICADA --> [*]
+DESCARTADA --> [*]
+@enduml

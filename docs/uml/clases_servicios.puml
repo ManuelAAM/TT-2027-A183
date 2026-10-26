@@ -1,0 +1,82 @@
+@startuml clases_servicios
+' Diagrama de clases de los colectores, el motor de diagnóstico y la capa de almacenamiento
+!include estilo.iuml
+hide circle
+hide empty members
+
+package "src/monitoring" {
+  class "utils" as utils <<módulo>> {
+    + get_operating_system() : str
+    + validate_target(target) : bool
+    + decode_process_output(raw) : str
+    + run_command_safe(cmd, timeout) : tuple
+  }
+  class PingCollector {
+    - target : str
+    - count : int
+    - timeout_seconds : int
+    + run() : PingResult
+    - _build_command() : list
+    - _parse_output(stdout, stderr, code) : PingResult
+  }
+  class TracerouteCollector {
+    - target : str
+    - max_hops : int
+    - timeout_per_hop_ms : int
+    + run() : TracerouteResult
+    - _build_command() : list
+    - _parse_output(stdout, stderr, code) : TracerouteResult
+  }
+  class IPerfCollector {
+    - server_host : str
+    - server_port : int
+    - duration_seconds : int
+    - protocol : str
+    + run() : IPerfResult
+    - _build_command(binary) : list
+    - _parse_iperf_json(stdout, stderr, code) : IPerfResult
+  }
+  class NetworkDiagnosticsEngine {
+    + target : str
+    + iperf_server : str
+    + run_diagnostics(...) : NetworkHealthReport
+    - _analyze_and_recommend(report) : void
+  }
+}
+
+package "src/storage" {
+  class DatabaseConfig {
+    + host : str
+    + port : int
+    + dbname : str
+    + user : str
+    + from_env() : DatabaseConfig
+    + conninfo_kwargs() : dict
+  }
+  class "mapper" as mapper <<módulo>> {
+    + pruebas_desde_reporte(reporte) : list
+    + diagnostico_desde_reporte(reporte) : DiagnosticoFila
+    + clasificar_diagnostico(reporte) : tuple
+  }
+  class MonitoreoRepository {
+    - conn : Connection
+    + registrar_red(nombre, ...) : int
+    + registrar_dispositivo(nombre, ...) : int
+    + guardar_reporte(reporte, id_dispositivo) : UUID
+    + historial_metricas(filtros) : list
+    + ultimos_diagnosticos(limite) : list
+    + resumen_por_destino(dias) : list
+  }
+}
+
+NetworkDiagnosticsEngine --> PingCollector : usa
+NetworkDiagnosticsEngine --> TracerouteCollector : usa
+NetworkDiagnosticsEngine --> IPerfCollector : usa
+PingCollector ..> utils
+TracerouteCollector ..> utils
+IPerfCollector ..> utils
+MonitoreoRepository ..> mapper : usa
+MonitoreoRepository ..> DatabaseConfig : conexión
+' Coloca el paquete de almacenamiento debajo del de monitoreo para que el diagrama no sea tan ancho
+utils -[hidden]down-> MonitoreoRepository
+@enduml

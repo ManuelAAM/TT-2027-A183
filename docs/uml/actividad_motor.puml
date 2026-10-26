@@ -1,0 +1,48 @@
+@startuml actividad_motor
+' Diagrama de actividad: reglas del motor de diagnóstico (Tabla 3.4, REG-01 a REG-05,
+' más la regla de pérdida UDP implementada en diagnostics.py)
+!include estilo.iuml
+
+start
+:Recibir resultados de ping,
+traceroute e iPerf3;
+:estado = OPTIMAL;
+if (¿Ping sin respuesta o 100 % de pérdida?) then (sí)
+  :estado = UNREACHABLE
+  (REG-01: revisar enlace físico,
+  gateway y firewall);
+elseif (¿Pérdida de paquetes mayor a 0 %?) then (sí)
+  :estado = DEGRADED
+  (REG-02: interferencia o cableado,
+  renovar DHCP);
+elseif (¿RTT promedio mayor a 120 ms?) then (sí)
+  :estado = DEGRADED
+  (REG-03: revisar transferencias
+  masivas en el canal);
+else (no)
+endif
+if (¿Traceroute no llegó al destino\ny el ping sí respondió?) then (sí)
+  :Agregar aviso informativo
+  (REG-04: discrepancia de ruta);
+else (no)
+endif
+if (¿iPerf3 con más de 50\nretransmisiones TCP?) then (sí)
+  :estado = DEGRADED si era OPTIMAL
+  (REG-05: congestión en
+  la capa de transporte);
+else (no)
+endif
+if (¿iPerf3 UDP con pérdida\nmayor a 5 %?) then (sí)
+  :estado = DEGRADED si era OPTIMAL
+  (pérdida en el flujo UDP);
+else (no)
+endif
+if (¿Hay recomendaciones?) then (no)
+  :Agregar mensaje de
+  conexión óptima;
+else (sí)
+endif
+:Entregar NetworkHealthReport con
+estado y recomendaciones;
+stop
+@enduml

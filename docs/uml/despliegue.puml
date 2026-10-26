@@ -1,0 +1,24 @@
+@startuml despliegue
+' Diagrama de despliegue del sistema
+!include estilo.iuml
+
+node "Equipo de laboratorio (sonda)\nWindows 10/11 o Linux" as N1 {
+  artifact "Python 3.10+\nsrc/monitoring\nsrc/storage" as A1
+  artifact "ping · tracert/traceroute\niperf3 (cliente)" as A2
+}
+
+node "Servidor central" as N2 {
+  artifact "API REST (FastAPI)\n<<TT2>>" as A3
+  database "PostgreSQL 17\nmonitoreo_red" as DB
+}
+
+node "Servidor iPerf3\n(equipo autorizado de la red)" as N3 {
+  artifact "iperf3 -s\npuerto 5201" as A4
+}
+
+node "Navegador web\n(usuario o técnico)" as N4
+
+N1 --> N2 : TCP 5432 (TT1)\nHTTP/JSON (TT2)
+N1 --> N3 : TCP/UDP 5201
+N4 --> N2 : HTTP\n<<TT2>>
+@enduml

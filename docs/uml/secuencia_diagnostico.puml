@@ -1,0 +1,44 @@
+@startuml secuencia_diagnostico
+' Diagrama de secuencia: ejecutar un diagnóstico y registrarlo en el historial (CU-01 y CU-06)
+!include estilo.iuml
+skinparam sequenceMessageAlign center
+autonumber
+
+actor "Usuario" as U
+participant "NetworkDiagnosticsEngine" as M
+participant "PingCollector" as P
+participant "TracerouteCollector" as T
+participant "utils" as UT
+participant "MonitoreoRepository" as R
+participant "mapper" as MP
+database "PostgreSQL" as DB
+
+U -> M : run_diagnostics(destino)
+M -> P : run()
+P -> UT : validate_target(destino)
+UT --> P : válido
+P -> UT : run_command_safe(["ping", ...])
+UT --> P : salida del sistema operativo
+P --> M : PingResult
+M -> T : run()
+T -> UT : run_command_safe(["tracert", ...])
+UT --> T : salida del sistema operativo
+T --> M : TracerouteResult
+opt servidor iPerf3 disponible (CU-04)
+  M -> M : execute_iperf(servidor)
+end
+M -> M : _analyze_and_recommend(reporte)
+M --> U : NetworkHealthReport
+U -> R : guardar_reporte(reporte, id_sonda)
+R -> MP : pruebas_desde_reporte(reporte)
+MP --> R : filas de pruebas y métricas
+R -> MP : diagnostico_desde_reporte(reporte)
+MP --> R : fila de diagnóstico y recomendaciones
+R -> DB : BEGIN
+loop por cada prueba
+  R -> DB : INSERT pruebas_conectividad, metricas
+end
+R -> DB : INSERT diagnosticos, recomendaciones
+R -> DB : COMMIT
+R --> U : id_ejecucion (UUID)
+@enduml

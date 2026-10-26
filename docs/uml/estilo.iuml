@@ -1,0 +1,11 @@
+' Estilo común de los diagramas UML del TT 2027-A183 (blanco y negro, tipografía del reporte)
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 13
+skinparam roundCorner 6
+skinparam ArrowColor black
+skinparam BackgroundColor white
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle

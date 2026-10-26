@@ -1,0 +1,99 @@
+@startuml clases_dominio
+' Diagrama de clases del modelo de dominio (DTOs) - src/monitoring/models.py
+!include estilo.iuml
+hide circle
+hide empty methods
+
+class PingResult {
+  + target : str
+  + destination_ip : str [0..1]
+  + packets_transmitted : int
+  + packets_received : int
+  + packets_lost : int
+  + packet_loss_percentage : float
+  + min_rtt_ms : float [0..1]
+  + avg_rtt_ms : float [0..1]
+  + max_rtt_ms : float [0..1]
+  + jitter_ms : float [0..1]
+  + is_reachable : bool
+  + status : str
+  + execution_time_seconds : float
+  + error_message : str [0..1]
+  + timestamp : str
+  --
+  + to_dict() : dict
+  + to_json() : str
+}
+
+class TracerouteResult {
+  + target : str
+  + destination_ip : str [0..1]
+  + total_hops : int
+  + reached_destination : bool
+  + status : str
+  + execution_time_seconds : float
+  + error_message : str [0..1]
+  + timestamp : str
+  --
+  + to_dict() : dict
+  + to_json() : str
+}
+
+class TracerouteHop {
+  + hop_number : int
+  + ip_address : str [0..1]
+  + hostname : str [0..1]
+  + rtt_ms : list
+  + packet_loss_percentage : float
+  + avg_rtt_ms : float [0..1]
+}
+
+class IPerfResult {
+  + server_host : str
+  + server_port : int
+  + protocol : str
+  + duration_seconds : float
+  + sender_throughput_mbps : float
+  + receiver_throughput_mbps : float
+  + retransmissions : int [0..1]
+  + mean_rtt_ms : float [0..1]
+  + jitter_ms : float [0..1]
+  + lost_packets : int [0..1]
+  + total_packets : int [0..1]
+  + packet_loss_percentage : float [0..1]
+  + is_success : bool
+  + status : str
+  + error_message : str [0..1]
+  + timestamp : str
+  --
+  + to_dict() : dict
+  + to_json() : str
+}
+
+class IPerfInterval {
+  + interval_id : int
+  + start_seconds : float
+  + end_seconds : float
+  + bytes_transferred : int
+  + throughput_mbps : float
+  + retransmits : int [0..1]
+  + jitter_ms : float [0..1]
+  + packet_loss_percentage : float [0..1]
+}
+
+class NetworkHealthReport {
+  + target : str
+  + overall_status : str
+  + initial_recommendations : list
+  + timestamp : str
+  --
+  + to_dict() : dict
+  + to_json() : str
+}
+
+NetworkHealthReport o-- "0..1" PingResult : ping
+NetworkHealthReport o-- "0..1" TracerouteResult : traceroute
+NetworkHealthReport o-- "0..1" IPerfResult : iperf
+TracerouteResult *-- "0..*" TracerouteHop : hops
+IPerfResult *-- "0..*" IPerfInterval : intervals
+@enduml

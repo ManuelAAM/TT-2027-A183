@@ -1,0 +1,51 @@
+@startuml casos_de_uso
+' Diagrama de casos de uso - Sistema de Monitoreo de Red (TT 2027-A183)
+!include estilo.iuml
+skinparam usecase {
+  BackgroundColor white
+  BorderColor black
+}
+left to right direction
+
+actor "Usuario académico\n(estudiante o docente)" as UA
+actor "Personal técnico" as PT
+actor "Administrador\nde la plataforma" as AD
+actor "Planificador\n(temporizador)" as PL
+
+rectangle "Sistema de Monitoreo, Diagnóstico y Recomendación" {
+  usecase "CU-07\nConsultar resultado\ndel diagnóstico" as CU07
+  usecase "CU-01\nEjecutar diagnóstico\nde red" as CU01
+  usecase "CU-02\nMedir conectividad\ny latencia (ping)" as CU02
+  usecase "CU-03\nTrazar ruta al\ndestino (traceroute)" as CU03
+  usecase "CU-04\nMedir rendimiento\n(iPerf3)" as CU04
+  usecase "CU-05\nGenerar diagnóstico\ny recomendaciones" as CU05
+  usecase "CU-06\nRegistrar resultados\nen el historial" as CU06
+  usecase "CU-08\nConsultar historial\nde pruebas" as CU08
+  usecase "CU-09\nConsultar resumen de\nmétricas por destino" as CU09
+  usecase "CU-10\nVisualizar reportes" as CU10
+  usecase "CU-11\nDar seguimiento a\nproblemas de red" as CU11
+  usecase "CU-12\nRegistrar redes\ny sondas" as CU12
+  usecase "CU-13\nProgramar pruebas\nperiódicas" as CU13
+  usecase "CU-14\nCapturar y analizar\npaquetes (tshark)" as CU14
+  usecase "CU-15\nConsultar historial\npor semana y mes" as CU15
+}
+
+UA --> CU01
+UA --> CU07
+PL --> CU01
+PT --> CU01
+PT --> CU08
+PT --> CU09
+PT --> CU10
+PT --> CU11
+PT --> CU15
+AD --> CU12
+AD --> CU13
+
+CU01 ..> CU02 : <<include>>
+CU01 ..> CU03 : <<include>>
+CU01 ..> CU05 : <<include>>
+CU01 ..> CU06 : <<include>>
+CU04 ..> CU01 : <<extend>>
+CU14 ..> CU01 : <<extend>>
+@enduml
